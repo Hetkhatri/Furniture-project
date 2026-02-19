@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "262113820251",
+    "project_id": "furniture-ecommerce-app-32829",
+    "storage_bucket": "furniture-ecommerce-app-32829.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:262113820251:android:0872236a5c9c352933097e",
+        "android_client_info": {
+          "package_name": "com.shashank.platform.furnitureecommerceappui"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeYmJ3dfQNGkvPZ1CgAzSdES1q8uCMHMc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
