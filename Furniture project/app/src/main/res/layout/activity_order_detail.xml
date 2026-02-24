@@ -355,6 +355,18 @@
 
             <!-- Action Buttons -->
             <Button
+                android:id="@+id/download_invoice_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="#4CAF50"
+                android:fontFamily="@font/calibri"
+                android:text="Download Invoice"
+                android:textAllCaps="false"
+                android:textColor="#ffffff"
+                android:textSize="16sp" />
+
+            <Button
                 android:id="@+id/cancel_order_button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

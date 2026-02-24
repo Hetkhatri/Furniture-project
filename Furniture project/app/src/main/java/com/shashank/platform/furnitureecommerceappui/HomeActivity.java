@@ -45,7 +45,7 @@ public class HomeActivity extends AppCompatActivity implements ProductAdapter.On
     private ProgressBar productsProgress;
     private TextView emptyText;
     private EditText searchEditText;
-    private FloatingActionButton favorite;
+    private FloatingActionButton favorite, chatbotFab;
     private LinearLayout personLinearLayout;
     private FrameLayout cartIcon;
     private TextView cartBadge, greetingText;
@@ -108,6 +108,7 @@ public class HomeActivity extends AppCompatActivity implements ProductAdapter.On
         footerCartCount = findViewById(R.id.footer_cart_count);
         footerCartTotal = findViewById(R.id.footer_cart_total);
         footerViewCartButton = findViewById(R.id.footer_view_cart_button);
+        chatbotFab = findViewById(R.id.chatbot_fab);
 
         categoryAll = findViewById(R.id.category_all);
         categoryChairs = findViewById(R.id.category_chairs);
@@ -263,6 +264,11 @@ public class HomeActivity extends AppCompatActivity implements ProductAdapter.On
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             });
         }
+
+        chatbotFab.setOnClickListener(v -> {
+            startActivity(new Intent(this, ChatbotActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+        });
     }
 
     private void listenToCartBadge() {

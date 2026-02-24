@@ -24,7 +24,7 @@ public class ProfileActivity extends AppCompatActivity {
     private CircleImageView profileImage;
     private TextView profileName, profileEmail, ordersCount, favoritesCount;
     private LinearLayout homeLinearLayout;
-    private LinearLayout editProfileOption, ordersOption, cartOption, logoutOption, changePasswordOption, aboutOption, addressOption, helpOption, settingsOption;
+    private LinearLayout ordersOption, cartOption, logoutOption, changePasswordOption, aboutOption, addressOption, helpOption;
     private LinearLayout ordersTab, favoritesTab;
 
     private FirebaseHelper firebaseHelper;
@@ -49,7 +49,6 @@ public class ProfileActivity extends AppCompatActivity {
         ordersCount = findViewById(R.id.profile_orders_count);
         favoritesCount = findViewById(R.id.profile_favorites_count);
         homeLinearLayout = findViewById(R.id.home_linear_layout);
-        editProfileOption = findViewById(R.id.profile_edit_option);
         ordersOption = findViewById(R.id.profile_orders_option);
         cartOption = findViewById(R.id.profile_cart_option);
         logoutOption = findViewById(R.id.profile_logout_option);
@@ -57,7 +56,6 @@ public class ProfileActivity extends AppCompatActivity {
         aboutOption = findViewById(R.id.profile_about_option);
         addressOption = findViewById(R.id.profile_address_option);
         helpOption = findViewById(R.id.profile_help_option);
-        settingsOption = findViewById(R.id.profile_settings_option);
         ordersTab = findViewById(R.id.profile_orders_tab);
         favoritesTab = findViewById(R.id.profile_favorites_tab);
     }
@@ -69,11 +67,6 @@ public class ProfileActivity extends AppCompatActivity {
             startActivity(intent);
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             finish();
-        });
-
-        editProfileOption.setOnClickListener(v -> {
-            startActivity(new Intent(this, EditProfileActivity.class));
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
         ordersOption.setOnClickListener(v -> {
@@ -107,11 +100,13 @@ public class ProfileActivity extends AppCompatActivity {
         });
 
         helpOption.setOnClickListener(v -> {
-            Toast.makeText(this, "Help & Support coming soon!", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(this, ChatbotActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
-        settingsOption.setOnClickListener(v -> {
-            Toast.makeText(this, "Settings coming soon!", Toast.LENGTH_SHORT).show();
+        changePasswordOption.setOnClickListener(v -> {
+            startActivity(new Intent(this, ChangePasswordActivity.class));
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
         logoutOption.setOnClickListener(v -> {
@@ -145,10 +140,10 @@ public class ProfileActivity extends AppCompatActivity {
         String uid = firebaseHelper.getCurrentUserId();
         if (uid == null) return;
 
-        firebaseHelper.getOrdersRef().child(uid).addValueEventListener(new ValueEventListener() {
+        firebaseHelper.getOrdersRef().orderByChild("userId").equalTo(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                ordersCount.setText(String.valueOf(snapshot.getChildrenCount()));
+                ordersCount.setText(snapshot.getChildrenCount() + " Orders");
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}
@@ -157,7 +152,7 @@ public class ProfileActivity extends AppCompatActivity {
         firebaseHelper.getFavoritesRef(uid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                favoritesCount.setText(String.valueOf(snapshot.getChildrenCount()));
+                favoritesCount.setText(snapshot.getChildrenCount() + " Favourites");
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {}

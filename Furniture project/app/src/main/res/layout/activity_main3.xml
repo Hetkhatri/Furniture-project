@@ -153,43 +153,6 @@
                     android:layout_marginTop="24dp"
                     android:orientation="vertical">
 
-                    <!-- Edit Profile -->
-                    <LinearLayout
-                        android:id="@+id/profile_edit_option"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@android:drawable/ic_menu_edit"
-                            android:tint="#444444" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/calibri"
-                            android:text="Edit Profile"
-                            android:textColor="#444444"
-                            android:textSize="16sp" />
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@drawable/ic_arrow_forward_black_24dp" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eeeeee" />
-
                     <!-- My Orders -->
                     <LinearLayout
                         android:id="@+id/profile_orders_option"
@@ -397,43 +360,6 @@
                             android:layout_weight="1"
                             android:fontFamily="@font/calibri"
                             android:text="Help &amp; Support"
-                            android:textColor="#444444"
-                            android:textSize="16sp" />
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@drawable/ic_arrow_forward_black_24dp" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:background="#eeeeee" />
-
-                    <!-- Settings -->
-                    <LinearLayout
-                        android:id="@+id/profile_settings_option"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:padding="16dp">
-
-                        <ImageView
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:src="@android:drawable/ic_menu_preferences"
-                            android:tint="#444444" />
-
-                        <TextView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="16dp"
-                            android:layout_weight="1"
-                            android:fontFamily="@font/calibri"
-                            android:text="Settings"
                             android:textColor="#444444"
                             android:textSize="16sp" />
 

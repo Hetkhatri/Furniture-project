@@ -5,10 +5,12 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -16,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -33,7 +36,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private TextView orderIdText, statusText, dateText, totalText;
     private TextView shippingName, shippingPhone, shippingAddress;
     private LinearLayout itemsContainer;
-    private Button cancelButton, reorderButton;
+    private Button cancelButton, reorderButton, downloadInvoiceButton;
     private ImageView backButton;
 
     private View stepPending, stepConfirmed, stepShipped, stepDelivered;
@@ -80,6 +83,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         cancelButton = findViewById(R.id.cancel_order_button);
         reorderButton = findViewById(R.id.reorder_button);
         backButton = findViewById(R.id.order_detail_back);
+        downloadInvoiceButton = findViewById(R.id.download_invoice_button);
 
         stepPending = findViewById(R.id.step_pending);
         stepConfirmed = findViewById(R.id.step_confirmed);
@@ -88,21 +92,26 @@ public class OrderDetailActivity extends AppCompatActivity {
         line1 = findViewById(R.id.line_1);
         line2 = findViewById(R.id.line_2);
         line3 = findViewById(R.id.line_3);
+
+        downloadInvoiceButton.setOnClickListener(v -> {
+            Toast.makeText(this, "Downloading invoice...", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void loadOrder(String orderId) {
         firebaseHelper.getOrdersRef().child(orderId)
-            .addListenerForSingleValueEvent(new ValueEventListener() {
+            .addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (!snapshot.exists()) {
+                        Toast.makeText(OrderDetailActivity.this, "Order not found", Toast.LENGTH_SHORT).show();
+                        finish();
+                        return;
+                    }
                     currentOrder = snapshot.getValue(Order.class);
                     if (currentOrder != null) {
                         currentOrder.setId(snapshot.getKey());
                         displayOrder();
-                    } else {
-                        Toast.makeText(OrderDetailActivity.this,
-                            "Order not found", Toast.LENGTH_SHORT).show();
-                        finish();
                     }
                 }
 
@@ -202,29 +211,35 @@ public class OrderDetailActivity extends AppCompatActivity {
         if (items == null) return;
 
         for (CartItem item : items) {
-            LinearLayout row = new LinearLayout(this);
-            row.setOrientation(LinearLayout.HORIZONTAL);
-            row.setPadding(0, 8, 0, 8);
+            View itemView = LayoutInflater.from(this).inflate(R.layout.item_order_product_detail, itemsContainer, false);
 
-            // Item name + qty
-            TextView nameText = new TextView(this);
-            nameText.setLayoutParams(new LinearLayout.LayoutParams(
-                0, LinearLayout.LayoutParams.WRAP_CONTENT, 1));
-            nameText.setText(item.getProductName() + " × " + item.getQuantity());
-            nameText.setTextColor(Color.parseColor("#333333"));
-            nameText.setTextSize(14);
+            ImageView productImage = itemView.findViewById(R.id.product_image);
+            TextView productName = itemView.findViewById(R.id.product_name);
+            TextView productPrice = itemView.findViewById(R.id.product_price);
+            RatingBar ratingBar = itemView.findViewById(R.id.product_rating);
+            ImageView favoriteButton = itemView.findViewById(R.id.favorite_button);
 
-            // Item total price
-            TextView priceText = new TextView(this);
-            priceText.setText(String.format(Locale.US, "₹%.2f",
-                item.getProductPrice() * item.getQuantity()));
-            priceText.setTextColor(Color.parseColor("#333333"));
-            priceText.setTextSize(14);
-            priceText.setGravity(Gravity.END);
+            productName.setText(item.getProductName() + " × " + item.getQuantity());
+            productPrice.setText(String.format(Locale.US, "₹%.2f", item.getProductPrice() * item.getQuantity()));
 
-            row.addView(nameText);
-            row.addView(priceText);
-            itemsContainer.addView(row);
+            if (item.getProductImage() != null && !item.getProductImage().isEmpty()) {
+                Glide.with(this).load(item.getProductImage()).into(productImage);
+            }
+
+            favoriteButton.setOnClickListener(v -> {
+                String uid = firebaseHelper.getCurrentUserId();
+                if (uid == null) {
+                    Toast.makeText(this, "Please log in to manage favorites", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                // You would typically check if the item is already a favorite and toggle it.
+                // For this example, we'll just add it.
+                firebaseHelper.addToFavorites(uid, item.getProductId());
+                Toast.makeText(this, "Added to favorites!", Toast.LENGTH_SHORT).show();
+            });
+
+
+            itemsContainer.addView(itemView);
         }
     }
 
@@ -238,8 +253,6 @@ public class OrderDetailActivity extends AppCompatActivity {
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(this, "Order cancelled successfully",
                             Toast.LENGTH_SHORT).show();
-                        // Reload to reflect changes
-                        loadOrder(orderId);
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(this, "Failed to cancel: " + e.getMessage(),
