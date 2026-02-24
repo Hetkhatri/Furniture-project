@@ -3,6 +3,12 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Furniture-project.iml" filepath="$PROJECT_DIR$/.idea/Furniture-project.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Furniture project/app/src/androidTest/androidTest2.iml" filepath="$PROJECT_DIR$/Furniture project/app/src/androidTest/androidTest2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Furniture project/app/src/test/app.iml" filepath="$PROJECT_DIR$/Furniture project/app/src/test/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Furniture project/app/src/main/main2.iml" filepath="$PROJECT_DIR$/Furniture project/app/src/main/main2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Furniture project/app/build/intermediates/merged_manifest/debug/processDebugMainManifest/processDebugMainManifest.iml" filepath="$PROJECT_DIR$/Furniture project/app/build/intermediates/merged_manifest/debug/processDebugMainManifest/processDebugMainManifest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Furniture project/app/build/intermediates/merged_manifests/debug/processDebugManifest/processDebugManifest.iml" filepath="$PROJECT_DIR$/Furniture project/app/build/intermediates/merged_manifests/debug/processDebugManifest/processDebugManifest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Furniture project/app/build/intermediates/packaged_manifests/debug/processDebugManifestForPackage/processDebugManifestForPackage.iml" filepath="$PROJECT_DIR$/Furniture project/app/build/intermediates/packaged_manifests/debug/processDebugManifestForPackage/processDebugManifestForPackage.iml" />
     </modules>
   </component>
 </project>
