@@ -480,15 +480,15 @@
 
         </ScrollView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="64dp"
-            android:src="@drawable/ic_favorite_white_24dp"
-            app:fabSize="normal" />
+<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+<!--            android:id="@+id/favorite"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:layout_centerHorizontal="true"-->
+<!--            android:layout_marginBottom="64dp"-->
+<!--            android:src="@drawable/ic_favorite_white_24dp"-->
+<!--            app:fabSize="normal" />-->
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/chatbot_fab"
