@@ -96,6 +96,13 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
+            android:name=".ChatbotActivity"
+            android:label="Help &amp; Support"
+            android:exported="false"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustResize" />
+
+        <activity
             android:name=".RegisterActivity"
             android:label=""
             android:exported="false"
