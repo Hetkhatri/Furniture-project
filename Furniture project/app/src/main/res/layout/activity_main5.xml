@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main5Activity">
+    tools:context=".ProductDetailActivity">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,14 +19,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="360dp">
 
-
                 <ImageView
+                    android:id="@+id/detail_product_image"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:scaleType="centerCrop"
                     android:src="@drawable/favorite_img_4" />
 
                 <ImageView
+                    android:id="@+id/detail_back_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
@@ -36,12 +37,27 @@
                     android:src="@drawable/ic_keyboard_arrow_left_white_24dp" />
 
                 <ImageView
+                    android:id="@+id/detail_favorite_button"
                     android:layout_width="32dp"
                     android:layout_height="32dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentBottom="true"
                     android:layout_margin="16dp"
                     android:src="@drawable/ic_favorite_white_24dp" />
+
+                <ImageView
+                    android:id="@+id/detail_share_button"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:padding="4dp"
+                    android:src="@android:drawable/ic_menu_share"
+                    android:tint="#FFFFFF"
+                    android:contentDescription="Share Product"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
 
             </RelativeLayout>
 
@@ -63,19 +79,21 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/detail_product_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"
                             android:fontFamily="@font/calibri"
-                            android:text="Cactus"
+                            android:text="Product Name"
                             android:textColor="#000000"
                             android:textSize="24sp" />
 
                         <TextView
+                            android:id="@+id/detail_product_price"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/calibri"
-                            android:text="S19"
+                            android:text="₹0.00"
                             android:textColor="#8e8ef6"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -95,22 +113,80 @@
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/detail_product_category"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="4dp"
                             android:fontFamily="@font/calibri"
-                            android:text="Wildan Shop"
+                            android:text="Category"
                             android:textSize="16sp" />
 
                         <ImageView
                             android:layout_width="72dp"
                             android:layout_height="wrap_content"
-                            android:src="@drawable/four_star"
-                            />
+                            android:src="@drawable/four_star" />
 
                     </LinearLayout>
 
                 </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Quantity Selector -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingBottom="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/calibri"
+                    android:text="Quantity: "
+                    android:textColor="#444444"
+                    android:textSize="16sp" />
+
+                <Button
+                    android:id="@+id/detail_qty_minus"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/buttonshape"
+                    android:text="-"
+                    android:textColor="#ffffff"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/detail_qty_text"
+                    android:layout_width="48dp"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/calibri"
+                    android:gravity="center"
+                    android:text="1"
+                    android:textColor="#000000"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/detail_qty_plus"
+                    android:layout_width="36dp"
+                    android:layout_height="36dp"
+                    android:background="@drawable/buttonshape"
+                    android:text="+"
+                    android:textColor="#ffffff"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/detail_stock_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:fontFamily="@font/calibri"
+                    android:text="In stock"
+                    android:textColor="#4CAF50"
+                    android:textSize="14sp" />
 
             </LinearLayout>
 
@@ -123,29 +199,156 @@
                 android:background="#dedede" />
 
             <TextView
+                android:id="@+id/detail_product_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="in addition to being a decoration, cactus can also be a health benefit, let's buy cactus in our store because now discount 30%"
-                android:padding="16dp"
-                android:textColor="#444444"
                 android:fontFamily="@font/calibri"
-                android:textSize="16sp"
-                />
+                android:padding="16dp"
+                android:text="Product description will appear here"
+                android:textColor="#444444"
+                android:textSize="16sp" />
+
+            <!-- Reviews Section -->
+            <View
+                android:layout_width="200dp"
+                android:layout_height="4dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="8dp"
+                android:background="@color/colorAccent" />
+
+                <!-- Similar Products Section -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:fontFamily="@font/calibri"
+                        android:text="Similar Products"
+                        android:textColor="#333333"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/similar_products_recycler_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:clipToPadding="false"
+                        android:orientation="horizontal"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp" />
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="#eeeeee" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/calibri"
+                        android:text="Reviews"
+                        android:textColor="#000000"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/detail_avg_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/calibri"
+                        android:textColor="#FF9800"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <!-- Reviews list container -->
+                <LinearLayout
+                    android:id="@+id/reviews_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="8dp" />
+
+                <TextView
+                    android:id="@+id/no_reviews_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/calibri"
+                    android:gravity="center"
+                    android:padding="16dp"
+                    android:text="No reviews yet. Be the first to review!"
+                    android:textColor="#999999"
+                    android:textSize="14sp" />
+
+                <Button
+                    android:id="@+id/write_review_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:backgroundTint="#8793eb"
+                    android:fontFamily="@font/calibri"
+                    android:text="Write a Review"
+                    android:textAllCaps="false"
+                    android:textColor="#ffffff"
+                    android:textSize="15sp" />
+            </LinearLayout>
 
             <Button
+                android:id="@+id/detail_add_to_cart"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="16dp"
                 android:background="@drawable/buttonshape"
                 android:fontFamily="@font/calibri"
-                android:text="Buy Now"
+                android:text="Add to Cart"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
                 android:textSize="24sp" />
+
+            <!-- Loading indicator -->
+            <ProgressBar
+                android:id="@+id/detail_progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="32dp"
+                android:visibility="gone" />
+
         </LinearLayout>
 
     </ScrollView>
 
+    <include
+        layout="@layout/layout_cart_footer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_margin="16dp" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

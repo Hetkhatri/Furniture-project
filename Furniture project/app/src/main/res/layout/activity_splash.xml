@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#8793eb">
+
+    <!-- App Logo / Icon -->
+    <LinearLayout
+        android:id="@+id/splash_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/splash_logo"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/ic_shopping_cart_white_24dp"
+            android:scaleType="centerInside"
+            android:alpha="0" />
+
+        <TextView
+            android:id="@+id/splash_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:fontFamily="@font/calibri"
+            android:text="FurniShop"
+            android:textColor="#ffffff"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            android:alpha="0" />
+
+        <TextView
+            android:id="@+id/splash_tagline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/calibri"
+            android:text="Furnish Your Dreams"
+            android:textColor="#ddddff"
+            android:textSize="16sp"
+            android:alpha="0" />
+
+    </LinearLayout>
+
+    <!-- Bottom loading indicator -->
+    <ProgressBar
+        android:id="@+id/splash_progress"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
+        android:indeterminate="true"
+        android:indeterminateTint="#ffffff"
+        android:alpha="0" />
+
+</RelativeLayout>

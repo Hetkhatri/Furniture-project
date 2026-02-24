@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Furniture Store — Admin Panel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="admin-styles.css">
+</head>
+<body>
+
+<!-- ==================== LOGIN SCREEN ==================== -->
+<div id="login-screen" class="login-container">
+    <div class="login-card">
+        <div class="login-header">
+            <h1>🪑 Furniture Admin</h1>
+            <p>Sign in to manage your store</p>
+        </div>
+        <form id="login-form">
+            <div class="form-group">
+                <label for="login-email">Email</label>
+                <input type="email" id="login-email" placeholder="admin@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="login-password">Password</label>
+                <input type="password" id="login-password" placeholder="••••••••" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-full">Sign In</button>
+            <p id="login-error" class="error-text"></p>
+        </form>
+    </div>
+</div>
+
+<!-- ==================== ADMIN DASHBOARD ==================== -->
+<div id="admin-panel" class="admin-layout" style="display:none;">
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <h2>🪑 Admin</h2>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item active" data-section="dashboard">
+                <span class="nav-icon">📊</span> Dashboard
+            </li>
+            <li class="nav-item" data-section="products">
+                <span class="nav-icon">📦</span> Products
+            </li>
+            <li class="nav-item" data-section="orders">
+                <span class="nav-icon">🛒</span> Orders
+            </li>
+            <li class="nav-item" data-section="users">
+                <span class="nav-icon">👥</span> Users
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <button id="logout-btn" class="btn btn-outline btn-full">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- ===== DASHBOARD SECTION ===== -->
+        <section id="section-dashboard" class="content-section active">
+            <div class="section-header">
+                <h1>Dashboard</h1>
+                <p id="admin-welcome">Welcome, Admin</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card stat-purple">
+                    <div class="stat-icon">📦</div>
+                    <div class="stat-info">
+                        <h3 id="stat-products">0</h3>
+                        <p>Products</p>
+                    </div>
+                </div>
+                <div class="stat-card stat-blue">
+                    <div class="stat-icon">🛒</div>
+                    <div class="stat-info">
+                        <h3 id="stat-orders">0</h3>
+                        <p>Orders</p>
+                    </div>
+                </div>
+                <div class="stat-card stat-green">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <h3 id="stat-users">0</h3>
+                        <p>Users</p>
+                    </div>
+                </div>
+                <div class="stat-card stat-orange">
+                    <div class="stat-icon">💰</div>
+                    <div class="stat-info">
+                        <h3 id="stat-revenue">$0</h3>
+                        <p>Revenue</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-cards">
+                <div class="card">
+                    <h3>Recent Orders</h3>
+                    <div id="recent-orders-list" class="card-content">
+                        <p class="empty-text">Loading...</p>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>Order Status Breakdown</h3>
+                    <div id="order-status-breakdown" class="card-content">
+                        <p class="empty-text">Loading...</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== PRODUCTS SECTION ===== -->
+        <section id="section-products" class="content-section">
+            <div class="section-header">
+                <h1>Products</h1>
+                <button id="add-product-btn" class="btn btn-primary">+ Add Product</button>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="product-search" placeholder="Search products...">
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Rating</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table-body">
+                        <tr><td colspan="6" class="empty-text">Loading products...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== ORDERS SECTION ===== -->
+        <section id="section-orders" class="content-section">
+            <div class="section-header">
+                <h1>Orders</h1>
+            </div>
+
+            <div class="filter-bar">
+                <select id="order-status-filter">
+                    <option value="all">All Orders</option>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                    <option value="cancelled">Cancelled</option>
+                </select>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Order ID</th>
+                            <th>Date</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="orders-table-body">
+                        <tr><td colspan="7" class="empty-text">Loading orders...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ===== USERS SECTION ===== -->
+        <section id="section-users" class="content-section">
+            <div class="section-header">
+                <h1>Users</h1>
+            </div>
+
+            <div class="table-container">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Role</th>
+                            <th>Joined</th>
+                        </tr>
+                    </thead>
+                    <tbody id="users-table-body">
+                        <tr><td colspan="4" class="empty-text">Loading users...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<!-- ==================== PRODUCT MODAL ==================== -->
+<div id="product-modal" class="modal" style="display:none;">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="product-modal-title">Add Product</h2>
+            <button class="modal-close" onclick="closeProductModal()">&times;</button>
+        </div>
+        <form id="product-form">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="product-name">Name</label>
+                    <input type="text" id="product-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-category">Category</label>
+                    <select id="product-category" required>
+                        <option value="Chairs">Chairs</option>
+                        <option value="Lamps">Lamps</option>
+                        <option value="Plants">Plants</option>
+                        <option value="Tables">Tables</option>
+                        <option value="Storage">Storage</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="product-description">Description</label>
+                <textarea id="product-description" rows="3" required></textarea>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="product-price">Price ($)</label>
+                    <input type="number" id="product-price" step="0.01" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-stock">Stock</label>
+                    <input type="number" id="product-stock" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label for="product-rating">Rating</label>
+                    <input type="number" id="product-rating" step="0.1" min="0" max="5" value="4.0">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="product-image">Image URL (optional)</label>
+                <input type="url" id="product-image" placeholder="https://...">
+            </div>
+            <input type="hidden" id="product-edit-id">
+            <div class="modal-actions">
+                <button type="button" class="btn btn-outline" onclick="closeProductModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Product</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- ==================== ORDER DETAIL MODAL ==================== -->
+<div id="order-modal" class="modal" style="display:none;">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Order Details</h2>
+            <button class="modal-close" onclick="closeOrderModal()">&times;</button>
+        </div>
+        <div id="order-detail-content">
+            <!-- Filled dynamically -->
+        </div>
+    </div>
+</div>
+
+<!-- Firebase SDK -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script src="admin-app.js"></script>
+
+</body>
+</html>

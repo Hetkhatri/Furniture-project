@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main3Activity">
+    tools:context=".ProfileActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -19,78 +19,92 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:theme="@style/AppTheme.Toolbar">
-
-        </androidx.appcompat.widget.Toolbar>
+            app:theme="@style/AppTheme.Toolbar" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottom_nav_bar">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile_image"
-                    android:layout_width="84dp"
-                    android:layout_height="84dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="16dp"
-                    android:src="@drawable/profile_pic" />
-
-                <TextView
+                <!-- Profile Header -->
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:layout_marginBottom="4dp"
-                    android:fontFamily="@font/calibri"
-                    android:text="Mukund k"
-                    android:textColor="#000000"
-                    android:textSize="18sp" />
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginRight="16dp"
-                    android:fontFamily="@font/calibri"
-                    android:text="Mobile Application Developer"
-                    android:textSize="14sp" />
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/profile_image"
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
+                        android:src="@drawable/profile_pic" />
 
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/profile_name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/calibri"
+                            android:text="Loading..."
+                            android:textColor="#000000"
+                            android:textSize="20sp" />
+
+                        <TextView
+                            android:id="@+id/profile_email"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/calibri"
+                            android:text=""
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <!-- Stats Row -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:background="#f4f4f4"
                     android:orientation="horizontal"
-                    android:paddingLeft="16dp"
-                    android:paddingTop="16dp"
-                    android:paddingRight="16dp"
+                    android:padding="16dp"
                     android:weightSum="100">
 
                     <LinearLayout
+                        android:id="@+id/profile_orders_tab"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="50"
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/profile_orders_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:fontFamily="@font/calibri"
-                            android:text="24 Collection"
+                            android:text="0 Orders"
                             android:textColor="#000000"
                             android:textSize="14sp" />
 
@@ -104,17 +118,19 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/profile_favorites_tab"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="50"
                         android:orientation="vertical">
 
                         <TextView
+                            android:id="@+id/profile_favorites_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:fontFamily="@font/calibri"
-                            android:text="12 History"
+                            android:text="0 Favourites"
                             android:textColor="#b3b3b3"
                             android:textSize="14sp" />
 
@@ -130,192 +146,345 @@
 
                 </LinearLayout>
 
+                <!-- Profile Options -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="24dp"
-                    android:layout_marginLeft="24dp"
-                    android:orientation="horizontal"
-                    android:weightSum="100">
+                    android:layout_marginTop="24dp"
+                    android:orientation="vertical">
 
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="0dp"
+                    <!-- Edit Profile -->
+                    <LinearLayout
+                        android:id="@+id/profile_edit_option"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="4dp"
-                        app:cardBackgroundColor="#ffc6c6"
-                        android:layout_weight="50"
-                        app:cardUseCompatPadding="true"
-                        app:contentPadding="16dp">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/ic_menu_edit"
+                            android:tint="#444444" />
+
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/calibri"
+                            android:text="Edit Profile"
+                            android:textColor="#444444"
+                            android:textSize="16sp" />
 
-                            <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginBottom="8dp"
-                                android:src="@drawable/chair_light_orange_bg" />
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_arrow_forward_black_24dp" />
 
+                    </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/calibri"
-                                android:text="Best Chairs"
-                                android:layout_marginTop="16dp"
-                                android:textColor="#3C3C3C"
-                                android:textSize="16sp" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eeeeee" />
 
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="0dp"
+                    <!-- My Orders -->
+                    <LinearLayout
+                        android:id="@+id/profile_orders_option"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="4dp"
-                        app:cardBackgroundColor="#f9f9f9"
-                        android:layout_weight="50"
-                        app:cardUseCompatPadding="true"
-                        app:contentPadding="16dp">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/ic_menu_agenda"
+                            android:tint="#444444" />
+
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/calibri"
+                            android:text="My Orders"
+                            android:textColor="#444444"
+                            android:textSize="16sp" />
 
-                            <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginBottom="8dp"
-                                android:src="@drawable/lamp_light_gray_bg" />
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_arrow_forward_black_24dp" />
 
+                    </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/calibri"
-                                android:text="Best Lamps"
-                                android:layout_marginTop="16dp"
-                                android:textColor="#3C3C3C"
-                                android:textSize="16sp" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eeeeee" />
 
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="24dp"
-                    android:layout_marginLeft="24dp"
-                    android:orientation="horizontal"
-                    android:weightSum="100">
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="0dp"
+                    <!-- Shipping Addresses -->
+                    <LinearLayout
+                        android:id="@+id/profile_address_option"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="8dp"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="4dp"
-                        app:cardBackgroundColor="#f9f9f9"
-                        android:layout_weight="50"
-                        app:cardUseCompatPadding="true"
-                        app:contentPadding="16dp">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_home_gray_24dp"
+                            android:tint="#444444" />
+
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/calibri"
+                            android:text="Shipping Addresses"
+                            android:textColor="#444444"
+                            android:textSize="16sp" />
 
-                            <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginBottom="8dp"
-                                android:src="@drawable/chair_light_gray_bg" />
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_arrow_forward_black_24dp" />
 
+                    </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/calibri"
-                                android:text="Best Chairs"
-                                android:layout_marginTop="16dp"
-                                android:textColor="#3C3C3C"
-                                android:textSize="16sp" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eeeeee" />
 
-                        </LinearLayout>
-
-                    </androidx.cardview.widget.CardView>
-
-                    <androidx.cardview.widget.CardView
-                        android:layout_width="0dp"
+                    <!-- My Cart -->
+                    <LinearLayout
+                        android:id="@+id/profile_cart_option"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
-                        app:cardCornerRadius="8dp"
-                        app:cardElevation="4dp"
-                        app:cardBackgroundColor="#a4bdff"
-                        android:layout_weight="50"
-                        app:cardUseCompatPadding="true"
-                        app:contentPadding="16dp">
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_shopping_cart_white_24dp"
+                            android:tint="#444444" />
+
+                        <TextView
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical">
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/calibri"
+                            android:text="My Cart"
+                            android:textColor="#444444"
+                            android:textSize="16sp" />
 
-                            <ImageView
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:layout_marginTop="8dp"
-                                android:layout_marginBottom="8dp"
-                                android:src="@drawable/plant_light_blue_bg" />
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_arrow_forward_black_24dp" />
 
+                    </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/calibri"
-                                android:text="Plant Choice"
-                                android:layout_marginTop="16dp"
-                                android:textColor="#3C3C3C"
-                                android:textSize="16sp" />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eeeeee" />
 
-                        </LinearLayout>
+                    <!-- Change Password -->
+                    <LinearLayout
+                        android:id="@+id/profile_change_password_option"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
 
-                    </androidx.cardview.widget.CardView>
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/ic_lock_lock"
+                            android:tint="#8793eb" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/calibri"
+                            android:text="Change Password"
+                            android:textColor="#444444"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_arrow_forward_black_24dp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eeeeee" />
+
+                    <!-- About Us -->
+                    <LinearLayout
+                        android:id="@+id/profile_about_option"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/ic_menu_info_details"
+                            android:tint="#444444" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/calibri"
+                            android:text="About Us"
+                            android:textColor="#444444"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_arrow_forward_black_24dp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eeeeee" />
+
+                    <!-- Help & Support -->
+                    <LinearLayout
+                        android:id="@+id/profile_help_option"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/ic_menu_help"
+                            android:tint="#444444" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/calibri"
+                            android:text="Help &amp; Support"
+                            android:textColor="#444444"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_arrow_forward_black_24dp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eeeeee" />
+
+                    <!-- Settings -->
+                    <LinearLayout
+                        android:id="@+id/profile_settings_option"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/ic_menu_preferences"
+                            android:tint="#444444" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/calibri"
+                            android:text="Settings"
+                            android:textColor="#444444"
+                            android:textSize="16sp" />
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/ic_arrow_forward_black_24dp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="#eeeeee" />
+
+                    <!-- Logout -->
+                    <LinearLayout
+                        android:id="@+id/profile_logout_option"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:padding="16dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@android:drawable/ic_lock_power_off"
+                            android:tint="#FF5252" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_weight="1"
+                            android:fontFamily="@font/calibri"
+                            android:text="Logout"
+                            android:textColor="#FF5252"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
 
-
         </ScrollView>
 
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/favorite"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginBottom="24dp"
-            android:src="@drawable/ic_favorite_white_24dp"
-            app:fabSize="normal" />
-
+        <!-- Bottom Navigation Bar -->
         <LinearLayout
+            android:id="@+id/bottom_nav_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

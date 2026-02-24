@@ -126,6 +126,48 @@
                             android:textColorHint="#FFB3B3B3">
 
                             <EditText
+                                android:id="@+id/register_name_input"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:autofillHints="name"
+                                android:drawableStart="@drawable/ic_person_gray_24dp"
+                                android:drawablePadding="16dp"
+                                android:fontFamily="@font/calibri"
+                                android:hint="Full Name"
+                                android:inputType="textPersonName"
+                                android:maxLines="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:textColorHint="#FFB3B3B3">
+
+                            <EditText
+                                android:id="@+id/register_phone_input"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:autofillHints="phone"
+                                android:drawableStart="@drawable/ic_person_gray_24dp"
+                                android:drawablePadding="16dp"
+                                android:fontFamily="@font/calibri"
+                                android:hint="Phone Number"
+                                android:inputType="phone"
+                                android:maxLines="1"
+                                android:textColor="@android:color/black"
+                                android:textSize="16sp" />
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="16dp"
+                            android:textColorHint="#FFB3B3B3">
+
+                            <EditText
                                 android:id="@+id/register_email_input"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"

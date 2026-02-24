@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="32dp">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="24dp"
+        android:src="@drawable/ic_person_gray_24dp"
+        android:tint="#8793eb"
+        android:scaleType="fitCenter" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/calibri"
+        android:gravity="center"
+        android:text="Verify Your Email"
+        android:textColor="#000000"
+        android:textSize="28sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/verification_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="@font/calibri"
+        android:gravity="center"
+        android:text="We've sent a verification link to your email. Please check your inbox and click the link to verify your account."
+        android:textColor="#666666"
+        android:textSize="16sp"
+        android:lineSpacingMultiplier="1.3" />
+
+    <TextView
+        android:id="@+id/verification_email_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="@font/calibri"
+        android:gravity="center"
+        android:textColor="#8793eb"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ProgressBar
+        android:id="@+id/verification_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="16dp"
+        android:visibility="gone" />
+
+    <Button
+        android:id="@+id/verify_check_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="12dp"
+        android:background="@drawable/buttonshape"
+        android:fontFamily="@font/calibri"
+        android:text="I've Verified My Email"
+        android:textAllCaps="false"
+        android:textColor="#ffffff"
+        android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/resend_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/transparent"
+        android:fontFamily="@font/calibri"
+        android:text="Resend Verification Email"
+        android:textAllCaps="false"
+        android:textColor="#8793eb"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/verification_timer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/calibri"
+        android:gravity="center"
+        android:textColor="#999999"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+</LinearLayout>

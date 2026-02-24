@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main2Activity">
+    tools:context=".HomeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -33,6 +33,7 @@
                     android:layout_marginBottom="8dp">
 
                     <ImageView
+                        android:id="@+id/menu_icon"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_alignParentStart="true"
@@ -48,12 +49,32 @@
                         android:textColor="#FFFFFF"
                         android:textSize="24sp" />
 
-                    <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                    <FrameLayout
+                        android:id="@+id/cart_icon"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:src="@drawable/ic_shopping_cart_white_24dp" />
+                        android:padding="4dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_gravity="center"
+                            android:src="@drawable/ic_shopping_cart_white_24dp" />
+
+                        <TextView
+                            android:id="@+id/cart_badge"
+                            android:layout_width="18dp"
+                            android:layout_height="18dp"
+                            android:layout_gravity="top|end"
+                            android:background="@drawable/buttonshape"
+                            android:gravity="center"
+                            android:textColor="#ffffff"
+                            android:textSize="10sp"
+                            android:textStyle="bold"
+                            android:visibility="gone" />
+                    </FrameLayout>
 
                 </RelativeLayout>
 
@@ -63,11 +84,14 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginRight="16dp"
                     android:layout_marginBottom="16dp"
+                    android:gravity="center_vertical"
                     android:orientation="horizontal">
 
                     <EditText
-                        android:layout_width="match_parent"
+                        android:id="@+id/search_edit_text"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
+                        android:layout_weight="1"
                         android:background="@drawable/white_rounded_shape"
                         android:drawableLeft="@drawable/ic_search_light_gray_24dp"
                         android:drawablePadding="8dp"
@@ -78,7 +102,52 @@
                         android:textColorHint="#aeaeae"
                         android:textSize="14sp" />
 
+                    <ImageView
+                        android:id="@+id/sort_button"
+                        android:layout_width="36dp"
+                        android:layout_height="36dp"
+                        android:layout_marginStart="8dp"
+                        android:padding="6dp"
+                        android:src="@android:drawable/ic_menu_sort_by_size"
+                        android:tint="#FFFFFF"
+                        android:contentDescription="Sort Products"
+                        android:background="?attr/selectableItemBackgroundBorderless" />
 
+                </LinearLayout>
+
+                <!-- Recent Searches Section -->
+                <LinearLayout
+                    android:id="@+id/recent_searches_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical"
+                    android:visibility="gone">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/calibri"
+                        android:text="Recent Searches"
+                        android:textColor="#FFFFFF"
+                        android:textSize="12sp"
+                        android:alpha="0.7" />
+
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:scrollbars="none">
+
+                        <LinearLayout
+                            android:id="@+id/recent_searches_layout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal" />
+
+                    </HorizontalScrollView>
                 </LinearLayout>
             </LinearLayout>
 
@@ -86,21 +155,43 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_above="@id/bottom_nav_bar">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
 
+                <!-- Welcome Section -->
+                <TextView
+                    android:id="@+id/greeting_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/calibri"
+                    android:text="Hello, Guest"
+                    android:textColor="#333333"
+                    android:textSize="22sp"
+                    android:textStyle="bold" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/calibri"
+                    android:text="Find your perfect furniture"
+                    android:textColor="#888888"
+                    android:textSize="14sp" />
+
+                <!-- Category Section -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -120,100 +211,54 @@
                     android:scrollbars="none">
 
                     <LinearLayout
+                        android:id="@+id/category_container"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
                         android:padding="8dp">
 
+                        <!-- Categories will be added dynamically or kept static -->
                         <androidx.cardview.widget.CardView
+                            android:id="@+id/category_all"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="4dp"
                             app:cardCornerRadius="8dp"
                             app:cardElevation="4dp"
                             app:cardUseCompatPadding="true"
-                            app:contentPadding="12dp">
+                            app:contentPadding="12dp"
+                            app:cardBackgroundColor="@color/colorPrimaryDark">
 
                             <LinearLayout
-                                android:layout_width="100dp"
+                                android:layout_width="80dp"
                                 android:layout_height="wrap_content"
+                                android:gravity="center"
                                 android:orientation="vertical">
 
-                                <ImageView
-                                    android:layout_width="36dp"
-                                    android:layout_height="36dp"
-                                    android:src="@drawable/plant_white_bg" />
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
+                                <TextView
+                                    android:id="@+id/category_all_text"
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="16dp">
+                                    android:fontFamily="@font/calibri"
+                                    android:text="All"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="16sp" />
 
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/calibri"
-                                        android:text="Plant"
-                                        android:textColor="#3C3C3C"
-                                        android:textSize="16sp" />
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentTop="true"
-                                        android:layout_alignParentEnd="true"
-                                        android:src="@drawable/ic_arrow_forward_black_24dp" />
-                                </RelativeLayout>
-
+                                <TextView
+                                    android:id="@+id/category_all_count"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:alpha="0.7"
+                                    android:fontFamily="@font/calibri"
+                                    android:text="0 items"
+                                    android:textColor="#FFFFFF"
+                                    android:textSize="10sp" />
                             </LinearLayout>
 
                         </androidx.cardview.widget.CardView>
 
                         <androidx.cardview.widget.CardView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="4dp"
-                            app:cardCornerRadius="8dp"
-                            app:cardElevation="4dp"
-                            app:cardUseCompatPadding="true"
-                            app:contentPadding="12dp">
-
-                            <LinearLayout
-                                android:layout_width="100dp"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <ImageView
-                                    android:layout_width="36dp"
-                                    android:layout_height="36dp"
-                                    android:src="@drawable/lamp_white_bg" />
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="16dp">
-
-                                    <TextView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/calibri"
-                                        android:text="Lamp"
-                                        android:textColor="#3C3C3C"
-                                        android:textSize="16sp" />
-
-                                    <ImageView
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_alignParentTop="true"
-                                        android:layout_alignParentEnd="true"
-                                        android:src="@drawable/ic_arrow_forward_black_24dp" />
-                                </RelativeLayout>
-
-                            </LinearLayout>
-
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
+                            android:id="@+id/category_chairs"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="4dp"
@@ -238,12 +283,138 @@
                                     android:layout_marginTop="16dp">
 
                                     <TextView
+                                        android:id="@+id/category_chairs_text"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/calibri"
-                                        android:text="Chair"
+                                        android:text="Chairs"
                                         android:textColor="#3C3C3C"
                                         android:textSize="16sp" />
+
+                                    <TextView
+                                        android:id="@+id/category_chairs_count"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/category_chairs_text"
+                                        android:alpha="0.6"
+                                        android:fontFamily="@font/calibri"
+                                        android:text="0 items"
+                                        android:textColor="#3C3C3C"
+                                        android:textSize="10sp" />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentTop="true"
+                                        android:layout_alignParentEnd="true"
+                                        android:src="@drawable/ic_arrow_forward_black_24dp" />
+                                </RelativeLayout>
+
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/category_lamps"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="4dp"
+                            app:cardUseCompatPadding="true"
+                            app:contentPadding="12dp">
+
+                            <LinearLayout
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:src="@drawable/lamp_white_bg" />
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="16dp">
+
+                                    <TextView
+                                        android:id="@+id/category_lamps_text"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/calibri"
+                                        android:text="Lamps"
+                                        android:textColor="#3C3C3C"
+                                        android:textSize="16sp" />
+
+                                    <TextView
+                                        android:id="@+id/category_lamps_count"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/category_lamps_text"
+                                        android:alpha="0.6"
+                                        android:fontFamily="@font/calibri"
+                                        android:text="0 items"
+                                        android:textColor="#3C3C3C"
+                                        android:textSize="10sp" />
+
+                                    <ImageView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_alignParentTop="true"
+                                        android:layout_alignParentEnd="true"
+                                        android:src="@drawable/ic_arrow_forward_black_24dp" />
+                                </RelativeLayout>
+
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.cardview.widget.CardView
+                            android:id="@+id/category_plants"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="4dp"
+                            app:cardCornerRadius="8dp"
+                            app:cardElevation="4dp"
+                            app:cardUseCompatPadding="true"
+                            app:contentPadding="12dp">
+
+                            <LinearLayout
+                                android:layout_width="100dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="36dp"
+                                    android:layout_height="36dp"
+                                    android:src="@drawable/plant_white_bg" />
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="16dp">
+
+                                    <TextView
+                                        android:id="@+id/category_plants_text"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:fontFamily="@font/calibri"
+                                        android:text="Plants"
+                                        android:textColor="#3C3C3C"
+                                        android:textSize="16sp" />
+
+                                    <TextView
+                                        android:id="@+id/category_plants_count"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_below="@id/category_plants_text"
+                                        android:alpha="0.6"
+                                        android:fontFamily="@font/calibri"
+                                        android:text="0 items"
+                                        android:textColor="#3C3C3C"
+                                        android:textSize="10sp" />
 
                                     <ImageView
                                         android:layout_width="wrap_content"
@@ -261,6 +432,7 @@
 
                 </HorizontalScrollView>
 
+                <!-- Hot Items / Products Section -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -268,450 +440,41 @@
                     android:layout_marginRight="4dp"
                     android:fontFamily="@font/calibri"
                     android:padding="8dp"
-                    android:text="Hot Item"
+                    android:text="Hot Items"
                     android:textColor="#000000"
                     android:textSize="18sp" />
 
-                <LinearLayout
+                <!-- Loading indicator -->
+                <ProgressBar
+                    android:id="@+id/products_progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="gone" />
+
+                <!-- Empty state -->
+                <TextView
+                    android:id="@+id/empty_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
+                    android:fontFamily="@font/calibri"
+                    android:gravity="center"
+                    android:padding="32dp"
+                    android:text="No products found"
+                    android:textColor="#999999"
+                    android:textSize="16sp"
+                    android:visibility="gone" />
+
+                <!-- Products RecyclerView (Grid) -->
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/products_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
                     android:paddingLeft="8dp"
                     android:paddingTop="8dp"
                     android:paddingRight="8dp"
-                    android:paddingBottom="64dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:weightSum="100">
-
-                        <androidx.cardview.widget.CardView
-                            android:id="@+id/cactus_card_view"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="8dp"
-                            android:layout_weight="50"
-                            app:cardCornerRadius="16dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="200dp"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/favorite_img_4" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
-                                    android:background="#4D000000"
-                                    android:orientation="vertical"
-                                    android:padding="8dp">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/calibri"
-                                        android:text="Cactus"
-                                        android:textColor="#FFFFFF"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold" />
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="4dp"
-                                        android:orientation="horizontal"
-                                        android:weightSum="100">
-
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="80"
-                                            android:fontFamily="@font/calibri"
-                                            android:text="$18"
-                                            android:textColor="#FFFFFF"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold" />
-
-                                        <ImageView
-                                            android:layout_width="0dp"
-                                            android:layout_height="20dp"
-                                            android:layout_weight="20"
-                                            android:src="@drawable/ic_favorite_red_24dp"
-                                            android:visibility="gone" />
-
-
-                                    </LinearLayout>
-
-                                </LinearLayout>
-
-                            </RelativeLayout>
-
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_weight="50"
-                            app:cardCornerRadius="16dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="200dp"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/favorite_img_2" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
-                                    android:background="#4D000000"
-                                    android:orientation="vertical"
-                                    android:padding="8dp">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/calibri"
-                                        android:text="Traditional Chair"
-                                        android:textColor="#FFFFFF"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold" />
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="4dp"
-                                        android:orientation="horizontal"
-                                        android:weightSum="100">
-
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="80"
-                                            android:fontFamily="@font/calibri"
-                                            android:text="$24"
-                                            android:textColor="#FFFFFF"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold" />
-
-                                        <ImageView
-                                            android:layout_width="0dp"
-                                            android:layout_height="20dp"
-                                            android:layout_weight="20"
-                                            android:src="@drawable/ic_favorite_white_24dp" />
-
-
-                                    </LinearLayout>
-
-                                </LinearLayout>
-
-                            </RelativeLayout>
-                        </androidx.cardview.widget.CardView>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:weightSum="100">
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="8dp"
-                            android:layout_weight="50"
-                            app:cardCornerRadius="16dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="200dp"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/favorite_img_3" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
-                                    android:background="#4D000000"
-                                    android:orientation="vertical"
-                                    android:padding="8dp">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/calibri"
-                                        android:text="Wooden Chair"
-                                        android:textColor="#FFFFFF"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold" />
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="4dp"
-                                        android:orientation="horizontal"
-                                        android:weightSum="100">
-
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="80"
-                                            android:fontFamily="@font/calibri"
-                                            android:text="$44"
-                                            android:textColor="#FFFFFF"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold" />
-
-                                        <ImageView
-                                            android:layout_width="0dp"
-                                            android:layout_height="20dp"
-                                            android:layout_weight="20"
-                                            android:src="@drawable/ic_favorite_red_24dp"
-                                            android:visibility="gone" />
-
-
-                                    </LinearLayout>
-
-                                </LinearLayout>
-
-
-                            </RelativeLayout>
-
-
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_weight="50"
-                            app:cardCornerRadius="16dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="200dp"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/favorite_img_1" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
-                                    android:background="#4D000000"
-                                    android:orientation="vertical"
-                                    android:padding="8dp">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/calibri"
-                                        android:text="Elegant Lamp"
-                                        android:textColor="#FFFFFF"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold" />
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="4dp"
-                                        android:orientation="horizontal"
-                                        android:weightSum="100">
-
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="80"
-                                            android:fontFamily="@font/calibri"
-                                            android:text="$13"
-                                            android:textColor="#FFFFFF"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold" />
-
-                                        <ImageView
-                                            android:layout_width="0dp"
-                                            android:layout_height="20dp"
-                                            android:layout_weight="20"
-                                            android:src="@drawable/ic_favorite_red_24dp" />
-
-
-                                    </LinearLayout>
-
-                                </LinearLayout>
-
-                            </RelativeLayout>
-
-
-                        </androidx.cardview.widget.CardView>
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="8dp"
-                        android:weightSum="100">
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="8dp"
-                            android:layout_weight="50"
-                            app:cardCornerRadius="16dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="200dp"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/favorite_img_5" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
-                                    android:background="#4D000000"
-                                    android:orientation="vertical"
-                                    android:padding="8dp">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/calibri"
-                                        android:text="Beach Beautiful"
-                                        android:textColor="#FFFFFF"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold" />
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="4dp"
-                                        android:orientation="horizontal"
-                                        android:weightSum="100">
-
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="80"
-                                            android:fontFamily="@font/calibri"
-                                            android:text="$36"
-                                            android:textColor="#FFFFFF"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold" />
-
-                                        <ImageView
-                                            android:layout_width="0dp"
-                                            android:layout_height="20dp"
-                                            android:layout_weight="20"
-                                            android:visibility="gone"
-                                            android:src="@drawable/ic_favorite_red_24dp" />
-
-
-                                    </LinearLayout>
-
-                                </LinearLayout>
-
-                            </RelativeLayout>
-
-
-                        </androidx.cardview.widget.CardView>
-
-                        <androidx.cardview.widget.CardView
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
-                            android:layout_weight="50"
-                            app:cardCornerRadius="16dp">
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content">
-
-                                <ImageView
-                                    android:layout_width="match_parent"
-                                    android:layout_height="200dp"
-                                    android:scaleType="centerCrop"
-                                    android:src="@drawable/favorite_img_6" />
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_alignParentBottom="true"
-                                    android:background="#4D000000"
-                                    android:orientation="vertical"
-                                    android:padding="8dp">
-
-                                    <TextView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:fontFamily="@font/calibri"
-                                        android:text="Architectural"
-                                        android:textColor="#FFFFFF"
-                                        android:textSize="14sp"
-                                        android:textStyle="bold" />
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="4dp"
-                                        android:orientation="horizontal"
-                                        android:weightSum="100">
-
-                                        <TextView
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_weight="80"
-                                            android:fontFamily="@font/calibri"
-                                            android:text="$30"
-                                            android:textColor="#FFFFFF"
-                                            android:textSize="12sp"
-                                            android:textStyle="bold" />
-
-                                        <ImageView
-                                            android:layout_width="0dp"
-                                            android:layout_height="20dp"
-                                            android:layout_weight="20"
-                                            android:visibility="gone"
-                                            android:src="@drawable/ic_favorite_red_24dp" />
-
-
-                                    </LinearLayout>
-
-                                </LinearLayout>
-
-                            </RelativeLayout>
-
-
-                        </androidx.cardview.widget.CardView>
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
+                    android:paddingBottom="64dp" />
 
             </LinearLayout>
 
@@ -723,11 +486,19 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="64dp"
             android:src="@drawable/ic_favorite_white_24dp"
             app:fabSize="normal" />
 
+        <include
+            layout="@layout/layout_cart_footer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@id/bottom_nav_bar" />
+
+        <!-- Bottom Navigation Bar -->
         <LinearLayout
+            android:id="@+id/bottom_nav_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

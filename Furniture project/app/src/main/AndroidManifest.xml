@@ -3,8 +3,10 @@
     package="com.shashank.platform.furnitureecommerceappui">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".FurnitureApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -12,7 +14,44 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".Main5Activity"
+        <activity
+            android:name=".SplashActivity"
+            android:label=""
+            android:exported="true"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/MyAppTheme"
+            android:windowSoftInputMode="stateHidden|adjustPan">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".EmailVerificationActivity"
+            android:label=""
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/MyAppTheme"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity
+            android:name=".EditProfileActivity"
+            android:label=""
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/MyAppTheme"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity
+            android:name=".OrderDetailActivity"
+            android:label=""
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/MyAppTheme"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity android:name=".ProductDetailActivity"
             android:label=""
             android:exported="false"
             android:screenOrientation="fullSensor"
@@ -20,7 +59,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
     
         <activity
-            android:name=".Main4Activity"
+            android:name=".FavoritesActivity"
             android:label=""
             android:exported="false"
             android:screenOrientation="fullSensor"
@@ -28,7 +67,7 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
-            android:name=".Main3Activity"
+            android:name=".ProfileActivity"
             android:label=""
             android:exported="false"
             android:screenOrientation="fullSensor"
@@ -36,7 +75,31 @@
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
-            android:name=".Main2Activity"
+            android:name=".CartActivity"
+            android:label=""
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/MyAppTheme"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity
+            android:name=".CheckoutActivity"
+            android:label=""
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/MyAppTheme"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity
+            android:name=".OrderHistoryActivity"
+            android:label=""
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/MyAppTheme"
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity
+            android:name=".HomeActivity"
             android:label=""
             android:exported="false"
             android:screenOrientation="fullSensor"
@@ -54,15 +117,23 @@
         <activity
             android:name=".MainActivity"
             android:label=""
-            android:exported="true"
+            android:exported="false"
             android:screenOrientation="fullSensor"
             android:theme="@style/MyAppTheme"
-            android:windowSoftInputMode="stateHidden|adjustPan">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:windowSoftInputMode="stateHidden|adjustPan" />
+
+        <activity
+            android:name=".SavedAddressesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".OrderSuccessActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AboutActivity"
+            android:label=""
+            android:exported="false"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/MyAppTheme" />
     </application>
 
 </manifest>

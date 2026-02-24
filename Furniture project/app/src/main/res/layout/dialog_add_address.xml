@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <EditText
+            android:id="@+id/edit_address_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address Label (e.g. Home, Office)"
+            android:inputType="textCapWords" />
+
+        <EditText
+            android:id="@+id/edit_address_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Receiver Full Name"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/edit_address_phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Phone Number"
+            android:inputType="phone" />
+
+        <EditText
+            android:id="@+id/edit_address_line1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Flat/House No, Street"
+            android:inputType="textPostalAddress" />
+
+        <EditText
+            android:id="@+id/edit_address_city"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="City"
+            android:inputType="textFilter" />
+
+        <EditText
+            android:id="@+id/edit_address_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="State"
+            android:inputType="textFilter" />
+
+        <EditText
+            android:id="@+id/edit_address_pincode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="Pincode"
+            android:inputType="number" />
+
+    </LinearLayout>
+</ScrollView>
