@@ -31,7 +31,8 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
     private RecyclerView cartRecyclerView;
     private CartAdapter cartAdapter;
     private ProgressBar cartProgress;
-    private TextView cartEmpty, cartTotalPrice;
+    private View cartEmpty; // Changed to View to handle the layout
+    private TextView cartTotalPrice;
     private LinearLayout cartBottomBar;
     private Button checkoutButton;
     private ImageView backButton;
@@ -41,7 +42,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cart);
+        setContentView(R.layout.my_cart); // Using the new professional layout
 
         firebaseHelper = FirebaseHelper.getInstance();
 
@@ -88,7 +89,6 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
         String uid = firebaseHelper.getCurrentUserId();
         if (uid == null) {
             cartEmpty.setVisibility(View.VISIBLE);
-            cartEmpty.setText("Please log in to see your cart");
             cartBottomBar.setVisibility(View.GONE);
             return;
         }

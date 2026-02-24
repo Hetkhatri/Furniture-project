@@ -49,7 +49,7 @@
             <ImageView
                 android:layout_width="80dp"
                 android:layout_height="80dp"
-                android:src="@mipmap/ic_launcher"
+                android:src="@drawable/chair_white_bg"
                 android:contentDescription="App Logo" />
 
             <TextView
@@ -175,7 +175,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:fontFamily="@font/calibri"
-                android:text="Het Khatri"
+                android:text="grop_1_it_b"
                 android:textColor="#8793eb"
                 android:textSize="16sp"
                 android:textStyle="bold" />

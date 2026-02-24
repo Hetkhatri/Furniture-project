@@ -1,5 +1,6 @@
 package com.shashank.platform.furnitureecommerceappui.adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,8 @@ import java.util.List;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressViewHolder> {
 
-    private List<Address> addresses = new ArrayList<>();
+    private Context context;
+    private List<Address> addresses;
     private final OnAddressClickListener listener;
 
     public interface OnAddressClickListener {
@@ -25,7 +27,9 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.AddressV
         void onDeleteClick(Address address);
     }
 
-    public AddressAdapter(OnAddressClickListener listener) {
+    public AddressAdapter(Context context, List<Address> addresses, OnAddressClickListener listener) {
+        this.context = context;
+        this.addresses = addresses;
         this.listener = listener;
     }
 

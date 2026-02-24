@@ -12,14 +12,13 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@android:style/Theme.Material.Light">
+        android:theme="@style/AppTheme">
 
         <activity
             android:name=".SplashActivity"
             android:label=""
             android:exported="true"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,95 +30,83 @@
             android:name=".EmailVerificationActivity"
             android:label=""
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
             android:name=".EditProfileActivity"
             android:label=""
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
             android:name=".OrderDetailActivity"
             android:label=""
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity android:name=".ProductDetailActivity"
             android:label=""
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
     
         <activity
             android:name=".FavoritesActivity"
             android:label=""
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
             android:name=".ProfileActivity"
             android:label=""
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
             android:name=".CartActivity"
             android:label=""
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
             android:name=".CheckoutActivity"
             android:label=""
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
             android:name=".OrderHistoryActivity"
             android:label=""
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
             android:name=".HomeActivity"
             android:label=""
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.DeviceDefault.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
             android:name=".RegisterActivity"
             android:label=""
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
             android:name=".MainActivity"
             android:label=""
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden|adjustPan" />
 
         <activity
@@ -132,8 +119,7 @@
             android:name=".AboutActivity"
             android:label=""
             android:exported="false"
-            android:screenOrientation="fullSensor"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

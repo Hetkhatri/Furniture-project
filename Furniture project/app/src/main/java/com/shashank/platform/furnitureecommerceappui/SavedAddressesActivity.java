@@ -1,8 +1,8 @@
 package com.shashank.platform.furnitureecommerceappui;
 
 import android.app.AlertDialog;
-import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -26,14 +26,16 @@ import com.shashank.platform.furnitureecommerceappui.utils.FirebaseHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SavedAddressesActivity extends AppCompatActivity implements AddressAdapter.OnAddressClickListener {
+public class SavedAddressesActivity extends AppCompatActivity {
 
-    private RecyclerView recyclerView;
-    private AddressAdapter adapter;
-    private ProgressBar progressBar;
-    private LinearLayout emptyState;
+    private RecyclerView addressRecyclerView;
+    private AddressAdapter addressAdapter;
+    private ProgressBar addressProgress;
+    private View addressEmptyState;
     private ImageView backButton, addAddressButton;
+
     private FirebaseHelper firebaseHelper;
+    private List<Address> addressList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,119 +44,119 @@ public class SavedAddressesActivity extends AppCompatActivity implements Address
 
         firebaseHelper = FirebaseHelper.getInstance();
 
-        initViews();
-        setupRecyclerView();
-        loadAddresses();
-
-        backButton.setOnClickListener(v -> {
-            finish();
-            overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
-        });
-
-        addAddressButton.setOnClickListener(v -> showAddAddressDialog());
-    }
-
-    private void initViews() {
-        recyclerView = findViewById(R.id.address_recycler_view);
-        progressBar = findViewById(R.id.address_progress);
-        emptyState = findViewById(R.id.address_empty_state);
+        addressRecyclerView = findViewById(R.id.address_recycler_view);
+        addressProgress = findViewById(R.id.address_progress);
+        addressEmptyState = findViewById(R.id.address_empty_state);
         backButton = findViewById(R.id.address_back_button);
         addAddressButton = findViewById(R.id.add_address_button);
-    }
 
-    private void setupRecyclerView() {
-        adapter = new AddressAdapter(this);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
+        addressAdapter = new AddressAdapter(this, addressList, new AddressAdapter.OnAddressClickListener() {
+            @Override
+            public void onAddressClick(Address address) {
+                // For checkout selection if needed
+            }
+
+            @Override
+            public void onDeleteClick(Address address) {
+                deleteAddress(address);
+            }
+        });
+
+        addressRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        addressRecyclerView.setAdapter(addressAdapter);
+
+        backButton.setOnClickListener(v -> finish());
+        addAddressButton.setOnClickListener(v -> showAddAddressDialog());
+
+        loadAddresses();
     }
 
     private void loadAddresses() {
         String uid = firebaseHelper.getCurrentUserId();
         if (uid == null) return;
 
-        progressBar.setVisibility(View.VISIBLE);
-        firebaseHelper.getUsersRef().child(uid).child("addresses")
-            .addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    List<Address> addresses = new ArrayList<>();
-                    for (DataSnapshot ds : snapshot.getChildren()) {
-                        Address address = ds.getValue(Address.class);
-                        if (address != null) {
-                            address.setId(ds.getKey());
-                            addresses.add(address);
-                        }
+        addressProgress.setVisibility(View.VISIBLE);
+        firebaseHelper.getUserRef(uid).child("addresses").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                addressProgress.setVisibility(View.GONE);
+                addressList.clear();
+                for (DataSnapshot ds : snapshot.getChildren()) {
+                    Address address = ds.getValue(Address.class);
+                    if (address != null) {
+                        address.setId(ds.getKey());
+                        addressList.add(address);
                     }
-                    progressBar.setVisibility(View.GONE);
-                    adapter.setAddresses(addresses);
-                    emptyState.setVisibility(addresses.isEmpty() ? View.VISIBLE : View.GONE);
                 }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-                    progressBar.setVisibility(View.GONE);
+                if (addressList.isEmpty()) {
+                    addressEmptyState.setVisibility(View.VISIBLE);
+                    addressRecyclerView.setVisibility(View.GONE);
+                } else {
+                    addressEmptyState.setVisibility(View.GONE);
+                    addressRecyclerView.setVisibility(View.VISIBLE);
+                    addressAdapter.notifyDataSetChanged();
                 }
-            });
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                addressProgress.setVisibility(View.GONE);
+                Toast.makeText(SavedAddressesActivity.this, "Failed to load addresses", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void showAddAddressDialog() {
+        if (addressList.size() >= 3) {
+            Toast.makeText(this, "Maximum 3 addresses allowed", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.dialog_add_address, null);
-        EditText labelEdit = view.findViewById(R.id.edit_address_label);
-        EditText nameEdit = view.findViewById(R.id.edit_address_name);
-        EditText phoneEdit = view.findViewById(R.id.edit_address_phone);
-        EditText line1Edit = view.findViewById(R.id.edit_address_line1);
-        EditText cityEdit = view.findViewById(R.id.edit_address_city);
-        EditText stateEdit = view.findViewById(R.id.edit_address_state);
-        EditText pinEdit = view.findViewById(R.id.edit_address_pincode);
+        builder.setView(view);
 
-        new AlertDialog.Builder(this)
-            .setTitle("Add New Address")
-            .setView(view)
-            .setPositiveButton("Save", (dialog, which) -> {
-                String label = labelEdit.getText().toString().trim();
-                String name = nameEdit.getText().toString().trim();
-                String phone = phoneEdit.getText().toString().trim();
-                String line1 = line1Edit.getText().toString().trim();
-                String city = cityEdit.getText().toString().trim();
-                String state = stateEdit.getText().toString().trim();
-                String pin = pinEdit.getText().toString().trim();
+        EditText etTitle = view.findViewById(R.id.et_address_title);
+        EditText etStreet = view.findViewById(R.id.et_address_street);
+        EditText etCity = view.findViewById(R.id.et_address_city);
+        EditText etState = view.findViewById(R.id.et_address_state);
+        EditText etZip = view.findViewById(R.id.et_address_zip);
 
-                if (label.isEmpty() || name.isEmpty() || phone.isEmpty() || line1.isEmpty() || city.isEmpty() || state.isEmpty() || pin.isEmpty()) {
-                    Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            String title = etTitle.getText().toString().trim();
+            String street = etStreet.getText().toString().trim();
+            String city = etCity.getText().toString().trim();
+            String state = etState.getText().toString().trim();
+            String zip = etZip.getText().toString().trim();
 
-                saveAddressToFirebase(new Address(null, label, name, phone, line1, "", city, state, pin));
-            })
-            .setNegativeButton("Cancel", null)
-            .show();
+            if (TextUtils.isEmpty(title) || TextUtils.isEmpty(street) || TextUtils.isEmpty(city)) {
+                Toast.makeText(SavedAddressesActivity.this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Address newAddress = new Address(title, street, city, state, zip);
+            saveAddressToFirebase(newAddress);
+        });
+
+        builder.setNegativeButton("Cancel", null);
+        builder.create().show();
     }
 
     private void saveAddressToFirebase(Address address) {
         String uid = firebaseHelper.getCurrentUserId();
         if (uid == null) return;
 
-        firebaseHelper.getUsersRef().child(uid).child("addresses").push().setValue(address);
+        firebaseHelper.getUserRef(uid).child("addresses").push().setValue(address)
+                .addOnSuccessListener(aVoid -> Toast.makeText(SavedAddressesActivity.this, "Address added", Toast.LENGTH_SHORT).show())
+                .addOnFailureListener(e -> Toast.makeText(SavedAddressesActivity.this, "Failed to add", Toast.LENGTH_SHORT).show());
     }
 
-    @Override
-    public void onAddressClick(Address address) {
-        // Option to select this address if opened for picking
-        if (getIntent().getBooleanExtra("pick_address", false)) {
-            // Return address details to checkout
-            Intent data = new Intent();
-            data.putExtra("address_id", address.getId());
-            data.putExtra("address_text", address.getFullDisplayAddress());
-            setResult(RESULT_OK, data);
-            finish();
-        }
-    }
-
-    @Override
-    public void onDeleteClick(Address address) {
+    private void deleteAddress(Address address) {
         String uid = firebaseHelper.getCurrentUserId();
         if (uid == null) return;
 
-        firebaseHelper.getUsersRef().child(uid).child("addresses").child(address.getId()).removeValue();
+        firebaseHelper.getUserRef(uid).child("addresses").child(address.getId()).removeValue()
+                .addOnSuccessListener(aVoid -> Toast.makeText(SavedAddressesActivity.this, "Address deleted", Toast.LENGTH_SHORT).show());
     }
 }

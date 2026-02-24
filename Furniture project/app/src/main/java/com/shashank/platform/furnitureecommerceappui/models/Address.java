@@ -25,6 +25,14 @@ public class Address {
         this.pincode = pincode;
     }
 
+    public Address(String label, String addressLine1, String city, String state, String pincode) {
+        this.label = label;
+        this.addressLine1 = addressLine1;
+        this.city = city;
+        this.state = state;
+        this.pincode = pincode;
+    }
+
     public String getId() { return id; }
     public void setId(String id) { this.id = id; }
     public String getLabel() { return label; }

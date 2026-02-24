@@ -30,7 +30,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
     private RecyclerView ordersRecyclerView;
     private OrderAdapter orderAdapter;
     private ProgressBar ordersProgress;
-    private TextView ordersEmpty;
+    private View ordersEmpty;
     private ImageView backButton;
 
     private FirebaseHelper firebaseHelper;
@@ -38,7 +38,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_order_history);
+        setContentView(R.layout.my_order_activity);
 
         firebaseHelper = FirebaseHelper.getInstance();
 
@@ -72,7 +72,7 @@ public class OrderHistoryActivity extends AppCompatActivity {
         String uid = firebaseHelper.getCurrentUserId();
         if (uid == null) {
             ordersEmpty.setVisibility(View.VISIBLE);
-            ordersEmpty.setText("Please log in to see your orders");
+            ((TextView) ordersEmpty.findViewById(R.id.empty_orders_shop_button)).setText("Please log in to see your orders");
             return;
         }
 
