@@ -45,7 +45,7 @@ public class HomeActivity extends AppCompatActivity implements ProductAdapter.On
     private ProgressBar productsProgress;
     private TextView emptyText;
     private EditText searchEditText;
-    private FloatingActionButton favorite, chatbotFab;
+    private FloatingActionButton chatbotFab;
     private LinearLayout personLinearLayout;
     private FrameLayout cartIcon;
     private TextView cartBadge, greetingText;
@@ -96,7 +96,6 @@ public class HomeActivity extends AppCompatActivity implements ProductAdapter.On
         productsProgress = findViewById(R.id.products_progress);
         emptyText = findViewById(R.id.empty_text);
         searchEditText = findViewById(R.id.search_edit_text);
-        favorite = findViewById(R.id.favorite);
         personLinearLayout = findViewById(R.id.person_linear_layout);
         cartIcon = findViewById(R.id.cart_icon);
         cartBadge = findViewById(R.id.cart_badge);
@@ -231,11 +230,6 @@ public class HomeActivity extends AppCompatActivity implements ProductAdapter.On
     private void setupNavigation() {
         personLinearLayout.setOnClickListener(v -> {
             startActivity(new Intent(this, ProfileActivity.class));
-            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-        });
-
-        favorite.setOnClickListener(v -> {
-            startActivity(new Intent(this, FavoritesActivity.class));
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
