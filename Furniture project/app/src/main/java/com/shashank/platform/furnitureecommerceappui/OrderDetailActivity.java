@@ -1,9 +1,20 @@
 package com.shashank.platform.furnitureecommerceappui;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.graphics.pdf.PdfDocument;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +28,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.database.DataSnapshot;
@@ -26,6 +39,9 @@ import com.shashank.platform.furnitureecommerceappui.models.CartItem;
 import com.shashank.platform.furnitureecommerceappui.models.Order;
 import com.shashank.platform.furnitureecommerceappui.utils.FirebaseHelper;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -48,6 +64,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     private static final int COLOR_ACTIVE = Color.parseColor("#8793eb");
     private static final int COLOR_INACTIVE = Color.parseColor("#dddddd");
+    private static final String CHANNEL_ID = "invoice_download_channel";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +86,8 @@ public class OrderDetailActivity extends AppCompatActivity {
         if (orderId != null) {
             loadOrder(orderId);
         }
+        
+        createNotificationChannel();
     }
 
     private void initViews() {
@@ -94,7 +113,11 @@ public class OrderDetailActivity extends AppCompatActivity {
         line3 = findViewById(R.id.line_3);
 
         downloadInvoiceButton.setOnClickListener(v -> {
-            Toast.makeText(this, "Downloading invoice...", Toast.LENGTH_SHORT).show();
+            if (currentOrder != null) {
+                generatePDF();
+            } else {
+                Toast.makeText(this, "Order data not loaded yet", Toast.LENGTH_SHORT).show();
+            }
         });
     }
 
@@ -232,15 +255,121 @@ public class OrderDetailActivity extends AppCompatActivity {
                     Toast.makeText(this, "Please log in to manage favorites", Toast.LENGTH_SHORT).show();
                     return;
                 }
-                // You would typically check if the item is already a favorite and toggle it.
-                // For this example, we'll just add it.
                 firebaseHelper.addToFavorites(uid, item.getProductId());
                 Toast.makeText(this, "Added to favorites!", Toast.LENGTH_SHORT).show();
             });
 
-
             itemsContainer.addView(itemView);
         }
+    }
+
+    private void generatePDF() {
+        PdfDocument pdfDocument = new PdfDocument();
+        Paint paint = new Paint();
+        Paint titlePaint = new Paint();
+
+        PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(595, 842, 1).create();
+        PdfDocument.Page page = pdfDocument.startPage(pageInfo);
+        Canvas canvas = page.getCanvas();
+
+        // Title
+        titlePaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
+        titlePaint.setTextSize(24);
+        titlePaint.setColor(Color.BLACK);
+        canvas.drawText("ORDER INVOICE", 200, 50, titlePaint);
+
+        // Header Info
+        paint.setTextSize(14);
+        paint.setColor(Color.BLACK);
+        canvas.drawText("Order ID: " + currentOrder.getId(), 50, 100, paint);
+        SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
+        canvas.drawText("Date: " + sdf.format(new Date(currentOrder.getCreatedAt())), 50, 120, paint);
+        canvas.drawText("Status: " + currentOrder.getStatus().toUpperCase(), 50, 140, paint);
+
+        // Customer Info
+        canvas.drawText("Billed To:", 50, 180, titlePaint);
+        paint.setTextSize(12);
+        canvas.drawText(currentOrder.getUserName(), 50, 200, paint);
+        canvas.drawText(currentOrder.getUserEmail(), 50, 215, paint);
+        canvas.drawText(currentOrder.getShippingAddress(), 50, 230, paint);
+
+        // Items Table Header
+        canvas.drawLine(50, 260, 545, 260, paint);
+        canvas.drawText("Product", 50, 280, titlePaint);
+        canvas.drawText("Qty", 350, 280, titlePaint);
+        canvas.drawText("Price", 450, 280, titlePaint);
+        canvas.drawLine(50, 290, 545, 290, paint);
+
+        // Items
+        int y = 310;
+        if (currentOrder.getItems() != null) {
+            for (CartItem item : currentOrder.getItems()) {
+                canvas.drawText(item.getProductName(), 50, y, paint);
+                canvas.drawText(String.valueOf(item.getQuantity()), 350, y, paint);
+                canvas.drawText(String.format(Locale.US, "₹%.2f", item.getProductPrice() * item.getQuantity()), 450, y, paint);
+                y += 20;
+            }
+        }
+
+        // Total
+        canvas.drawLine(50, y + 10, 545, y + 10, paint);
+        titlePaint.setTextSize(16);
+        canvas.drawText("Grand Total: ₹" + String.format(Locale.US, "%.2f", currentOrder.getTotalPrice()), 350, y + 40, titlePaint);
+
+        // Footer
+        paint.setTextSize(10);
+        paint.setColor(Color.GRAY);
+        canvas.drawText("Thank you for shopping with us!", 230, 800, paint);
+
+        pdfDocument.finishPage(page);
+
+        // Save file
+        File file = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Invoice_" + currentOrder.getId().substring(0, 5) + ".pdf");
+        try {
+            pdfDocument.writeTo(new FileOutputStream(file));
+            showNotification(file);
+            Toast.makeText(this, "Invoice downloaded", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error generating PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        pdfDocument.close();
+    }
+
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Invoice Downloads";
+            String description = "Notifications for downloaded invoices";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void showNotification(File file) {
+        Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", file);
+        
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 
+            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_shopping_cart_white_24dp)
+                .setContentTitle("Invoice Downloaded")
+                .setContentText("Tap to view PDF invoice")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(1, builder.build());
     }
 
     private void cancelOrder() {
@@ -272,7 +401,6 @@ public class OrderDetailActivity extends AppCompatActivity {
             return;
         }
 
-        // Add all items back to cart
         for (CartItem item : currentOrder.getItems()) {
             CartItem cartItem = new CartItem(
                 item.getProductId(),
