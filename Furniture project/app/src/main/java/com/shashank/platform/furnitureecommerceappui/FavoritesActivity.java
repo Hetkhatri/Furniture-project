@@ -30,8 +30,8 @@ public class FavoritesActivity extends AppCompatActivity implements ProductAdapt
 
     private RecyclerView favoritesRecyclerView;
     private ProgressBar favoritesProgress;
-    private TextView favoritesEmpty;
-    private LinearLayout homeLinearLayout;
+    private View favoritesEmpty;
+    private LinearLayout homeLinearLayout, profileLinearLayout;
     private ProductAdapter adapter;
     private FirebaseHelper firebaseHelper;
 
@@ -54,6 +54,18 @@ public class FavoritesActivity extends AppCompatActivity implements ProductAdapt
         favoritesProgress = findViewById(R.id.favorites_progress);
         favoritesEmpty = findViewById(R.id.favorites_empty);
         homeLinearLayout = findViewById(R.id.home_linear_layout);
+        
+        // Find profileLinearLayout correctly from the bottom bar
+        View bottomBar = findViewById(R.id.bottom_nav_bar);
+        if (bottomBar instanceof LinearLayout) {
+            profileLinearLayout = (LinearLayout) ((LinearLayout)bottomBar).getChildAt(1);
+        } else {
+            // Fallback if ID not found directly
+            View parent = (View) homeLinearLayout.getParent();
+            if (parent instanceof LinearLayout) {
+                profileLinearLayout = (LinearLayout) ((LinearLayout)parent).getChildAt(1);
+            }
+        }
 
         adapter = new ProductAdapter(this, this, fallbackImages);
         favoritesRecyclerView.setLayoutManager(new GridLayoutManager(this, 2));
@@ -64,6 +76,14 @@ public class FavoritesActivity extends AppCompatActivity implements ProductAdapt
             overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
             finish();
         });
+
+        if (profileLinearLayout != null) {
+            profileLinearLayout.setOnClickListener(v -> {
+                startActivity(new Intent(this, ProfileActivity.class));
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+                finish();
+            });
+        }
 
         Button browseButton = findViewById(R.id.empty_fav_shop_button);
         if (browseButton != null) {
@@ -80,8 +100,13 @@ public class FavoritesActivity extends AppCompatActivity implements ProductAdapt
     private void loadFavorites() {
         String uid = firebaseHelper.getCurrentUserId();
         if (uid == null) {
-            favoritesEmpty.setVisibility(View.VISIBLE);
-            favoritesEmpty.setText("Please log in to see your favourites");
+            if (favoritesEmpty != null) {
+                favoritesEmpty.setVisibility(View.VISIBLE);
+                TextView emptyText = favoritesEmpty.findViewById(R.id.favorites_empty_text);
+                if (emptyText != null) {
+                    emptyText.setText("Please log in to see your favourites");
+                }
+            }
             return;
         }
 
@@ -97,7 +122,9 @@ public class FavoritesActivity extends AppCompatActivity implements ProductAdapt
 
                 if (favoriteIds.isEmpty()) {
                     favoritesProgress.setVisibility(View.GONE);
-                    favoritesEmpty.setVisibility(View.VISIBLE);
+                    if (favoritesEmpty != null) {
+                        favoritesEmpty.setVisibility(View.VISIBLE);
+                    }
                     favoritesRecyclerView.setVisibility(View.GONE);
                     return;
                 }
@@ -133,10 +160,14 @@ public class FavoritesActivity extends AppCompatActivity implements ProductAdapt
                 }
 
                 if (favoriteProducts.isEmpty()) {
-                    favoritesEmpty.setVisibility(View.VISIBLE);
+                    if (favoritesEmpty != null) {
+                        favoritesEmpty.setVisibility(View.VISIBLE);
+                    }
                     favoritesRecyclerView.setVisibility(View.GONE);
                 } else {
-                    favoritesEmpty.setVisibility(View.GONE);
+                    if (favoritesEmpty != null) {
+                        favoritesEmpty.setVisibility(View.GONE);
+                    }
                     favoritesRecyclerView.setVisibility(View.VISIBLE);
                     adapter.setProducts(favoriteProducts);
                     adapter.setFavoriteIds(favoriteIds);

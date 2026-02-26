@@ -1,5 +1,7 @@
 package com.shashank.platform.furnitureecommerceappui.models;
 
+import com.google.firebase.database.PropertyName;
+
 public class Product {
     private String id;
     private String name;
@@ -36,7 +38,20 @@ public class Product {
     public void setDescription(String description) { this.description = description; }
 
     public double getPrice() { return price; }
-    public void setPrice(double price) { this.price = price; }
+
+    // Improved setter to handle both Number and String types from Firebase
+    @PropertyName("price")
+    public void setPrice(Object price) {
+        if (price instanceof Number) {
+            this.price = ((Number) price).doubleValue();
+        } else if (price instanceof String) {
+            try {
+                this.price = Double.parseDouble((String) price);
+            } catch (NumberFormatException e) {
+                this.price = 0;
+            }
+        }
+    }
 
     public String getCategory() { return category; }
     public void setCategory(String category) { this.category = category; }

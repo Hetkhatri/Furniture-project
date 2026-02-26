@@ -78,6 +78,7 @@
                     android:src="@drawable/ic_favorite_red_24dp" />
 
                 <TextView
+                    android:id="@+id/favorites_empty_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
@@ -124,6 +125,7 @@
 
         <!-- Bottom Navigation -->
         <LinearLayout
+            android:id="@+id/bottom_nav_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

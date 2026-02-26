@@ -1,5 +1,6 @@
 package com.shashank.platform.furnitureecommerceappui.models;
 
+import com.google.firebase.database.PropertyName;
 import java.util.List;
 
 public class Order {
@@ -65,7 +66,19 @@ public class Order {
     public void setItems(List<CartItem> items) { this.items = items; }
 
     public double getTotalPrice() { return totalPrice; }
-    public void setTotalPrice(double totalPrice) { this.totalPrice = totalPrice; }
+
+    @PropertyName("totalPrice")
+    public void setTotalPrice(Object totalPrice) {
+        if (totalPrice instanceof Number) {
+            this.totalPrice = ((Number) totalPrice).doubleValue();
+        } else if (totalPrice instanceof String) {
+            try {
+                this.totalPrice = Double.parseDouble((String) totalPrice);
+            } catch (NumberFormatException e) {
+                this.totalPrice = 0;
+            }
+        }
+    }
 
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
@@ -74,5 +87,17 @@ public class Order {
     public void setPaymentMethod(String paymentMethod) { this.paymentMethod = paymentMethod; }
 
     public long getCreatedAt() { return createdAt; }
-    public void setCreatedAt(long createdAt) { this.createdAt = createdAt; }
+
+    @PropertyName("createdAt")
+    public void setCreatedAt(Object createdAt) {
+        if (createdAt instanceof Number) {
+            this.createdAt = ((Number) createdAt).longValue();
+        } else if (createdAt instanceof String) {
+            try {
+                this.createdAt = Long.parseLong((String) createdAt);
+            } catch (NumberFormatException e) {
+                this.createdAt = 0;
+            }
+        }
+    }
 }
