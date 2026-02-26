@@ -1,10 +1,12 @@
 package com.shashank.platform.furnitureecommerceappui;
 
+import android.Manifest;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -28,7 +30,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
@@ -65,6 +69,7 @@ public class OrderDetailActivity extends AppCompatActivity {
     private static final int COLOR_ACTIVE = Color.parseColor("#8793eb");
     private static final int COLOR_INACTIVE = Color.parseColor("#dddddd");
     private static final String CHANNEL_ID = "invoice_download_channel";
+    private static final int PERMISSION_REQUEST_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,11 +119,42 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         downloadInvoiceButton.setOnClickListener(v -> {
             if (currentOrder != null) {
-                generatePDF();
+                if (checkPermission()) {
+                    generatePDF();
+                } else {
+                    requestPermission();
+                }
             } else {
                 Toast.makeText(this, "Order data not loaded yet", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private boolean checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            return ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED;
+        }
+        return true;
+    }
+
+    private void requestPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                generatePDF();
+            } else {
+                Toast.makeText(this, "Permission denied to show notifications", Toast.LENGTH_SHORT).show();
+                // We generate PDF anyway, just notification might fail on Android 13+
+                generatePDF();
+            }
+        }
     }
 
     private void loadOrder(String orderId) {
@@ -281,17 +317,19 @@ public class OrderDetailActivity extends AppCompatActivity {
         // Header Info
         paint.setTextSize(14);
         paint.setColor(Color.BLACK);
-        canvas.drawText("Order ID: " + currentOrder.getId(), 50, 100, paint);
+        String orderIdToPrint = currentOrder.getId() != null ? currentOrder.getId() : "N/A";
+        canvas.drawText("Order ID: " + orderIdToPrint, 50, 100, paint);
         SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy", Locale.US);
         canvas.drawText("Date: " + sdf.format(new Date(currentOrder.getCreatedAt())), 50, 120, paint);
-        canvas.drawText("Status: " + currentOrder.getStatus().toUpperCase(), 50, 140, paint);
+        String statusToPrint = currentOrder.getStatus() != null ? currentOrder.getStatus().toUpperCase() : "PENDING";
+        canvas.drawText("Status: " + statusToPrint, 50, 140, paint);
 
         // Customer Info
         canvas.drawText("Billed To:", 50, 180, titlePaint);
         paint.setTextSize(12);
-        canvas.drawText(currentOrder.getUserName(), 50, 200, paint);
-        canvas.drawText(currentOrder.getUserEmail(), 50, 215, paint);
-        canvas.drawText(currentOrder.getShippingAddress(), 50, 230, paint);
+        canvas.drawText(currentOrder.getUserName() != null ? currentOrder.getUserName() : "Guest", 50, 200, paint);
+        canvas.drawText(currentOrder.getUserEmail() != null ? currentOrder.getUserEmail() : "", 50, 215, paint);
+        canvas.drawText(currentOrder.getShippingAddress() != null ? currentOrder.getShippingAddress() : "", 50, 230, paint);
 
         // Items Table Header
         canvas.drawLine(50, 260, 545, 260, paint);
@@ -304,6 +342,12 @@ public class OrderDetailActivity extends AppCompatActivity {
         int y = 310;
         if (currentOrder.getItems() != null) {
             for (CartItem item : currentOrder.getItems()) {
+                if (y > 750) { // Simple page break check
+                    pdfDocument.finishPage(page);
+                    page = pdfDocument.startPage(pageInfo);
+                    canvas = page.getCanvas();
+                    y = 50;
+                }
                 canvas.drawText(item.getProductName(), 50, y, paint);
                 canvas.drawText(String.valueOf(item.getQuantity()), 350, y, paint);
                 canvas.drawText(String.format(Locale.US, "₹%.2f", item.getProductPrice() * item.getQuantity()), 450, y, paint);
@@ -323,18 +367,20 @@ public class OrderDetailActivity extends AppCompatActivity {
 
         pdfDocument.finishPage(page);
 
-        // Save file
-        File file = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "Invoice_" + currentOrder.getId().substring(0, 5) + ".pdf");
+        // Save file - use public downloads directory for easier access
+        String fileName = "Invoice_" + (orderIdToPrint.length() > 5 ? orderIdToPrint.substring(0, 5) : orderIdToPrint) + "_" + System.currentTimeMillis() + ".pdf";
+        File file = new File(getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), fileName);
+        
         try {
             pdfDocument.writeTo(new FileOutputStream(file));
             showNotification(file);
-            Toast.makeText(this, "Invoice downloaded", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Invoice downloaded to Downloads folder", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Error generating PDF: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Error saving PDF: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        } finally {
+            pdfDocument.close();
         }
-
-        pdfDocument.close();
     }
 
     private void createNotificationChannel() {
@@ -345,31 +391,41 @@ public class OrderDetailActivity extends AppCompatActivity {
             NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
             channel.setDescription(description);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
-            notificationManager.createNotificationChannel(channel);
+            if (notificationManager != null) {
+                notificationManager.createNotificationChannel(channel);
+            }
         }
     }
 
     private void showNotification(File file) {
-        Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", file);
-        
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(uri, "application/pdf");
-        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            Uri uri = FileProvider.getUriForFile(this, getPackageName() + ".fileprovider", file);
+            
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setDataAndType(uri, "application/pdf");
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 
-            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_shopping_cart_white_24dp)
-                .setContentTitle("Invoice Downloaded")
-                .setContentText("Tap to view PDF invoice")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setSmallIcon(android.R.drawable.stat_sys_download_done)
+                    .setContentTitle("Invoice Downloaded")
+                    .setContentText("Order " + (currentOrder.getId().length() > 8 ? currentOrder.getId().substring(0, 8) : currentOrder.getId()))
+                    .setSubText("Tap to view PDF")
+                    .setPriority(NotificationCompat.PRIORITY_HIGH)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true);
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(1, builder.build());
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            if (notificationManager != null) {
+                notificationManager.notify((int) System.currentTimeMillis(), builder.build());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error showing notification: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void cancelOrder() {
